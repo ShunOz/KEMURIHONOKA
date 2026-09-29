@@ -37,7 +37,7 @@ def process(loc: dict, cfg: dict, done: set[str], gbp: GBP | None, account: str,
     targets = select_new(media, done, cfg["max_age_days"], cfg["max_posts_per_run"])
     posted: list[str] = []
     for m in targets:
-        summary = content.build_summary(m.caption, loc["name"], m.permalink, cfg["rewrite_with_claude"])
+        summary = content.build_summary(m.caption, loc, cfg["rewrite_with_claude"], cfg.get("tone", ""))
         first_photo = next((u for k, u in m.assets if k == "PHOTO"), None)
         print(f"[{loc['key']}] {m.id} {m.media_type} assets={len(m.assets)}\n{summary}\n")
         if not apply:

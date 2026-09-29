@@ -10,11 +10,19 @@ GBP API で投稿 → `state/posted.json` に記録(二重投稿防止)。
 - 写真: 最新情報の画像 + 写真タブに登録
 - 動画: 写真タブに登録 (GBPの最新情報投稿APIは動画非対応のため。30秒/75MBまで)
 - カルーセル: 全画像/動画を展開して写真タブへ、最初の画像を最新情報に使用
-- 投稿文: キャプションからハッシュタグ/メンションを除去、末尾にInstagramリンク。
-  `rewrite_with_claude: true` でGBP向けにClaudeが整形
+- 投稿文: MEO/SEO向けにClaudeが作成 (下記)。APIキー無し/検証NGならテンプレ文で代替
+
+## 投稿文のMEO/SEO方針
+`config/locations.yaml` の `seo`(エリア・最寄り・業態・狙う検索語・強み)と `tone` をもとに生成。
+- 冒頭100文字に 店名+エリア+業態/話題 (一覧表示で見える範囲)
+- 検索語は自然に1〜2個まで。詰め込み禁止 (GBP審査・評価低下の回避)
+- 事実はInstagram投稿の内容のみ。価格・日時・特典を創作しない
+- 電話番号/URL/ハッシュタグ/「!!」なし (リンクはCTAボタン)。150〜300文字、末尾に来店を促す一文
+- 生成後に自動検証し、NGなら指摘つきで1回再生成、それでもNGならテンプレ文にフォールバック
+- 店名は登録名(NAP)と一字一句同じ表記を使用
 
 ## セットアップ (要手動)
-1. `config/locations.yaml` の TODO(ig_user_id, gbp_location, cta_url)を記入
+1. `config/locations.yaml` の TODO(ig_user_id, gbp_location, cta_url, seo.*, tone)を記入
 2. **Instagram**: 各店舗アカウントをビジネス/クリエイターにし、Metaアプリで
    長期トークンを発行(60日で失効、要更新) → Secrets `IG_TOKEN_SHINJUKU` / `IG_TOKEN_IKEBUKURO`
 3. **GBP**: GCPで Business Profile API の利用申請・承認 → OAuth(scope `business.manage`)で

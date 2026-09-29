@@ -17,6 +17,12 @@ locations:
     ig_token_env: IG_TOKEN_IKEBUKURO
     gbp_location: ""           # TODO: 例 locations/0987654321
     cta_url: ""
+    seo:
+      area: ""
+      nearby: ""
+      category: ""
+      keywords: []
+      features: []
 
 settings:
   max_posts_per_run: 1         # 1店舗あたり1回の実行で投稿する最大件数
@@ -24,4 +30,5 @@ settings:
   max_age_days: 14             # これより古い投稿は対象外
   post_cta: LEARN_MORE         # BOOK / ORDER / LEARN_MORE / CALL など
   upload_media_to_gallery: true  # 写真・動画をGBPの写真タブにも登録する
-  rewrite_with_claude: false   # true でClaudeが投稿文をGBP向けに整形 (ANTHROPIC_API_KEY必要)
+  rewrite_with_claude: true    # ClaudeがMEO/SEO向けに投稿文を作成 (ANTHROPIC_API_KEY必要。無ければテンプレで代替)
+  tone: ""                    # TODO: 店の口調 例 "落ち着いた大人の雰囲気、丁寧語"
