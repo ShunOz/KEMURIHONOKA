@@ -10,19 +10,25 @@ locations:
     ig_token_env: IG_TOKEN_SHINJUKU
     gbp_location: ""           # TODO: 例 locations/1234567890
     cta_url: ""                # 任意: 投稿ボタンのリンク先(予約ページ等)
+    seo:                       # 出典: 検索結果に出ていた公式サイト/ホットペッパーの記載 (要確認)
+      area: "新宿"
+      nearby: "南新宿駅から徒歩4分、新宿駅から徒歩10分"
+      category: "シーシャカフェ&バー"
+      keywords: ["新宿 シーシャ", "南新宿 シーシャ", "代々木 シーシャ", "新宿 水タバコ"]
+      features: ["閑静な住宅街の2階", "14:00〜23:00営業"]
   - key: ikebukuro
     name: 煙仄2nd 池袋店
-    ig_username: ""            # TODO: 記入
+    ig_username: shisha_kemurihonoka2nd
     ig_user_id: ""             # TODO: 記入
     ig_token_env: IG_TOKEN_IKEBUKURO
     gbp_location: ""           # TODO: 例 locations/0987654321
     cta_url: ""
-    seo:
-      area: ""
-      nearby: ""
-      category: ""
-      keywords: []
-      features: []
+    seo:                       # 出典: 検索結果に出ていた公式サイト/ホットペッパー等の記載 (要確認)
+      area: "池袋"
+      nearby: "池袋駅西口から徒歩4分"
+      category: "シーシャカフェ&バー"
+      keywords: ["池袋 シーシャ", "池袋 水タバコ", "池袋 シーシャ ボードゲーム"]
+      features: ["路面店の広い店内", "60種類以上のフレーバー", "ボードゲーム・麻雀・アート", "14:00〜23:00営業"]
 
 settings:
   max_posts_per_run: 1         # 1店舗あたり1回の実行で投稿する最大件数
