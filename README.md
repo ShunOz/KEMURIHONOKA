@@ -4,8 +4,12 @@
 Googleビジネスプロフィール(GBP)の「最新情報」と写真タブへ毎日自動反映します。
 
 ## 仕組み
-GitHub Actions (毎日10:00 JST) → Instagram Graph API で直近投稿取得 → 未投稿かつ14日以内のものを
-GBP API で投稿 → `state/posted.json` に記録(二重投稿防止)。
+GitHub Actions (毎日10:00 JST) → Instagram Graph API で直近投稿取得 → 未投稿かつ14日以内のものを処理
+→ `state/posted.json` に記録(二重処理防止)。処理方法は `--mode` で切替:
+- `manual` (現在の運用): 投稿文を作り、写真/動画をダウンロードして成果物 `gbp-post-materials` に保存、
+  担当者向けの **GitHub Issue** (ラベル `gbp-post`) を作成。担当者がGBPに貼り付けて投稿し、Issueを閉じる。
+- `api`: GBP APIで完全自動投稿 (API利用承認が必要。承認後、ワークフローの `MODE` を `api` に変更)
+- `dry-run`: 内容確認のみ
 
 - 写真: 最新情報の画像 + 写真タブに登録
 - 動画: 写真タブに登録 (GBPの最新情報投稿APIは動画非対応のため。30秒/75MBまで)
@@ -35,5 +39,5 @@ GBP API で投稿 → `state/posted.json` に記録(二重投稿防止)。
 ## ローカル実行
     pip install -r requirements.txt
     pytest
-    python -m gbp_sync.main            # ドライラン
-    python -m gbp_sync.main --apply    # 実投稿
+    python -m gbp_sync.main                 # ドライラン
+    python -m gbp_sync.main --mode api      # GBP APIで実投稿 (要API承認)

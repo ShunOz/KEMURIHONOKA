@@ -4,12 +4,16 @@ on:
     - cron: "0 1 * * *"   # 毎日 10:00 JST
   workflow_dispatch:
     inputs:
-      apply:
-        description: "実際に投稿する (false でドライラン)"
-        type: boolean
-        default: true
+      mode:
+        description: "dry-run=確認のみ / manual=素材+Issue作成 / api=GBP APIで自動投稿"
+        type: choice
+        options: [dry-run, manual, api]
+        default: manual
+env:
+  MODE: ${{ inputs.mode || 'manual' }}   # 定期実行は manual。API承認後は api に変更
 permissions:
   contents: write
+  issues: write
 concurrency: gbp-sync
 jobs:
   sync:
@@ -29,13 +33,17 @@ jobs:
           GBP_REFRESH_TOKEN: ${{ secrets.GBP_REFRESH_TOKEN }}
           GBP_ACCOUNT: ${{ secrets.GBP_ACCOUNT }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ inputs.apply }}" = "true" ]; then
-            python -m gbp_sync.main --apply
-          else
-            python -m gbp_sync.main
-          fi
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m gbp_sync.main --mode "$MODE"
+      - name: Upload materials
+        if: ${{ !cancelled() && hashFiles('out/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: gbp-post-materials
+          path: out/
+          retention-days: 90
       - name: Commit state
+        if: ${{ !cancelled() }}
         run: |
           git config user.name "gbp-sync-bot"
           git config user.email "gbp-sync-bot@users.noreply.github.com"

@@ -1,5 +1,9 @@
 # 初期設定ガイド
 
+> **GBP API が使えない場合 (半自動 `manual` モード)**: 下の「B」は不要。Instagram(A)の設定と、
+> Secrets の `IG_TOKEN_*` / `ANTHROPIC_API_KEY` だけで動く。毎日Issueが作られるので、
+> 担当者が文章をコピーしGBPから投稿する。GBP_* の Secrets と gbp_location は空でよい。
+
 集める値は全部で下の表のとおり。A(Instagram)とB(GBP)は独立して進められる。
 Bは Google の承認待ちが数日かかることがあるので、**先にBの申請だけ出す**のがおすすめ。
 

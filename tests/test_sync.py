@@ -47,3 +47,44 @@ def test_validate_catches_problems():
 def test_truncates_and_empty_caption():
     assert len(content.build_summary("あ" * 3000, LOC)) <= 1500
     assert "煙仄 新宿本店" in content.build_summary("#only", LOC)
+
+
+def test_handoff_prepare_and_issue_body(tmp_path, monkeypatch):
+    from gbp_sync import handoff
+
+    class R:
+        content = b"data"
+        def raise_for_status(self): pass
+
+    monkeypatch.setattr(handoff.requests, "get", lambda *a, **k: R())
+    m = instagram.parse_media(item("a1", 1, "CAROUSEL_ALBUM", [
+        {"id": "c1", "media_type": "IMAGE", "media_url": "u1"},
+        {"id": "c2", "media_type": "VIDEO", "media_url": "u2"}]))
+    loc = {"key": "shinjuku", "name": "煙仄 新宿本店"}
+    d = handoff.prepare(m, "本文", loc, tmp_path)
+    assert sorted(p.name for p in d.iterdir()) == ["01_photo.jpg", "02_video.mp4", "post.txt"]
+    body = handoff.issue_body(m, "本文", loc, "https://run")
+    assert "本文" in body and "写真 1 枚 / 動画 1 本" in body and m.permalink in body
+
+
+def test_create_issue_requires_token(monkeypatch):
+    import pytest
+    from gbp_sync import handoff
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    m = instagram.parse_media(item("a", 1))
+    with pytest.raises(RuntimeError):
+        handoff.create_issue(m, "x", {"name": "n", "key": "k"})
+
+
+def test_manual_mode_does_not_need_gbp_location(monkeypatch):
+    from gbp_sync import main as m
+    monkeypatch.setenv("T", "tok")
+    seen = {}
+    monkeypatch.setattr(m.instagram, "fetch_recent", lambda *a: seen.setdefault("called", []) or [])
+    loc = {"key": "k", "name": "n", "ig_user_id": "1", "gbp_location": "", "ig_token_env": "T"}
+    cfg = {"lookback_posts": 1, "max_age_days": 1, "max_posts_per_run": 1, "rewrite_with_claude": False}
+    m.process(loc, cfg, set(), None, "", "manual")
+    assert "called" in seen                      # スキップされず取得まで進む
+    seen.clear()
+    m.process(loc, cfg, set(), None, "", "api")
+    assert "called" not in seen                  # apiモードでは未設定でスキップ
