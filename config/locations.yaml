@@ -5,7 +5,7 @@
 locations:
   - key: shinjuku
     name: 煙仄 新宿本店
-    ig_username: ""            # TODO: 記入
+    ig_username: shisha_kemurihonoka   # 公式サイトのリンクで確認済み
     ig_user_id: ""             # TODO: 記入
     ig_token_env: IG_TOKEN_SHINJUKU
     gbp_location: ""           # TODO: 例 locations/1234567890
@@ -24,7 +24,7 @@ locations:
         - "お酒からソフトドリンクまで種類豊富"
   - key: ikebukuro
     name: 煙仄2nd 池袋店
-    ig_username: shisha_kemurihonoka2nd
+    ig_username: shisha_kemurihonoka2nd  # 公式サイトのリンクで確認済み
     ig_user_id: ""             # TODO: 記入
     ig_token_env: IG_TOKEN_IKEBUKURO
     gbp_location: ""           # TODO: 例 locations/0987654321
