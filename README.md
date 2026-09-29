@@ -22,6 +22,7 @@ GBP API で投稿 → `state/posted.json` に記録(二重投稿防止)。
 - 店名は登録名(NAP)と一字一句同じ表記を使用
 
 ## セットアップ (要手動)
+詳細な手順は [docs/SETUP.md](docs/SETUP.md) を参照。
 1. `config/locations.yaml` の TODO(ig_user_id, gbp_location, cta_url, seo.*, tone)を記入
 2. **Instagram**: 各店舗アカウントをビジネス/クリエイターにし、Metaアプリで
    長期トークンを発行(60日で失効、要更新) → Secrets `IG_TOKEN_SHINJUKU` / `IG_TOKEN_IKEBUKURO`
