@@ -1,0 +1,27 @@
+# 店舗ごとの設定。ID類は Secrets ではなく設定値なのでここに記載する。
+# ig_user_id : Instagram ビジネス/クリエイターアカウントの数値ID
+# gbp_location: "locations/<ID>" 形式 (Business Profile API)
+# 各店舗のInstagramトークンは環境変数 (token_env) から読む。
+locations:
+  - key: shinjuku
+    name: 煙仄 新宿店
+    ig_username: ""            # TODO: 記入
+    ig_user_id: ""             # TODO: 記入
+    ig_token_env: IG_TOKEN_SHINJUKU
+    gbp_location: ""           # TODO: 例 locations/1234567890
+    cta_url: ""                # 任意: 投稿ボタンのリンク先(予約ページ等)
+  - key: ikebukuro
+    name: 煙仄2nd 池袋店
+    ig_username: ""            # TODO: 記入
+    ig_user_id: ""             # TODO: 記入
+    ig_token_env: IG_TOKEN_IKEBUKURO
+    gbp_location: ""           # TODO: 例 locations/0987654321
+    cta_url: ""
+
+settings:
+  max_posts_per_run: 1         # 1店舗あたり1回の実行で投稿する最大件数
+  lookback_posts: 10           # Instagramから取得する直近件数
+  max_age_days: 14             # これより古い投稿は対象外
+  post_cta: LEARN_MORE         # BOOK / ORDER / LEARN_MORE / CALL など
+  upload_media_to_gallery: true  # 写真・動画をGBPの写真タブにも登録する
+  rewrite_with_claude: false   # true でClaudeが投稿文をGBP向けに整形 (ANTHROPIC_API_KEY必要)
